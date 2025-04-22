@@ -6,15 +6,23 @@ interface ForecastDisplayProps {
   forecast: ForecastData;
 }
 
-// Weather condition backgrounds 
+// Weather condition backgrounds (with dark mode variants) 
 const weatherBackgrounds: Record<string, string> = {
-  Clear: 'from-blue-400 to-cyan-300',
-  Clouds: 'from-blue-300 to-gray-300',
-  Rain: 'from-blue-600 to-gray-500',
-  Drizzle: 'from-blue-500 to-gray-400',
-  Thunderstorm: 'from-indigo-700 to-gray-600',
-  Snow: 'from-blue-100 to-gray-200',
-  Mist: 'from-gray-300 to-gray-400',
+  Clear: 'from-blue-400 to-cyan-300 dark:from-blue-600 dark:to-cyan-600',
+  Clouds: 'from-blue-300 to-gray-300 dark:from-blue-600 dark:to-gray-600',
+  Rain: 'from-blue-600 to-gray-400 dark:from-blue-700 dark:to-gray-600',
+  Drizzle: 'from-blue-500 to-gray-400 dark:from-blue-700 dark:to-gray-500',
+  Thunderstorm: 'from-indigo-700 to-gray-600 dark:from-indigo-800 dark:to-gray-700',
+  Snow: 'from-blue-100 to-gray-200 dark:from-blue-300 dark:to-gray-300',
+  Mist: 'from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700',
+  Smoke: 'from-gray-500 to-gray-600 dark:from-gray-700 dark:to-gray-800',
+  Haze: 'from-yellow-200 to-gray-300 dark:from-yellow-400 dark:to-gray-600',
+  Dust: 'from-yellow-300 to-amber-300 dark:from-yellow-500 dark:to-amber-600',
+  Fog: 'from-gray-300 to-blue-200 dark:from-gray-600 dark:to-blue-500',
+  Sand: 'from-yellow-400 to-orange-300 dark:from-yellow-600 dark:to-orange-600',
+  Ash: 'from-gray-500 to-gray-600 dark:from-gray-700 dark:to-gray-800',
+  Squall: 'from-blue-600 to-gray-500 dark:from-blue-700 dark:to-gray-700',
+  Tornado: 'from-red-600 to-gray-600 dark:from-red-800 dark:to-gray-700',
 };
 
 export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {

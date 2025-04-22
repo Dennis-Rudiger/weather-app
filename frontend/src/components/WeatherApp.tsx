@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from '@/components/SearchBar';
 import WeatherDisplay from '@/components/WeatherDisplay';
 import ForecastDisplay from '@/components/ForecastDisplay';
+import ThemeToggle from '@/components/ThemeToggle';
 import { WeatherData, ForecastData } from '@/types/weather';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -55,7 +56,10 @@ export default function WeatherApp() {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="bg-white/70 backdrop-blur-md dark:bg-gray-800/70 rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
-        <div className="px-6 py-8 md:px-10 md:py-10">
+        <div className="flex justify-end pt-4 pr-6">
+          <ThemeToggle />
+        </div>
+        <div className="px-6 py-4 md:px-10 md:py-6">
           <SearchBar onSearch={handleSearch} />
           
           {loading && (
