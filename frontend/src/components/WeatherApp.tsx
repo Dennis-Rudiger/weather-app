@@ -5,6 +5,7 @@ import SearchBar from '@/components/SearchBar';
 import WeatherDisplay from '@/components/WeatherDisplay';
 import ForecastDisplay from '@/components/ForecastDisplay';
 import ThemeToggle from '@/components/ThemeToggle';
+import UnitToggle from '@/components/UnitToggle';
 import { WeatherData, ForecastData } from '@/types/weather';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -15,6 +16,7 @@ export default function WeatherApp() {
   const [forecast, setForecast] = useState<ForecastData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
 
   const handleSearch = async (searchCity: string) => {
     setCity(searchCity);
@@ -24,7 +26,7 @@ export default function WeatherApp() {
     try {
       // Get current weather
       const currentWeatherResponse = await fetch(
-        `${apiBaseUrl}/weather/current?city=${encodeURIComponent(searchCity)}&units=metric`
+        `${apiBaseUrl}/weather/current?city=${encodeURIComponent(searchCity)}&units=${unit}`
       );
       
       if (!currentWeatherResponse.ok) {
@@ -36,7 +38,7 @@ export default function WeatherApp() {
       
       // Get forecast
       const forecastResponse = await fetch(
-        `${apiBaseUrl}/weather/forecast?city=${encodeURIComponent(searchCity)}&units=metric`
+        `${apiBaseUrl}/weather/forecast?city=${encodeURIComponent(searchCity)}&units=${unit}`
       );
       
       if (!forecastResponse.ok) {
@@ -53,10 +55,22 @@ export default function WeatherApp() {
     }
   };
 
+  // Refetch data when unit changes and we have a city
+  useEffect(() => {
+    if (city) {
+      handleSearch(city);
+    }
+  }, [unit]);
+
+  const handleUnitChange = (newUnit: 'metric' | 'imperial') => {
+    setUnit(newUnit);
+  };
+
   return (
     <div className="max-w-5xl mx-auto">
       <div className="bg-white/70 backdrop-blur-md dark:bg-gray-800/70 rounded-2xl shadow-xl overflow-hidden transition-all duration-300">
-        <div className="flex justify-end pt-4 pr-6">
+        <div className="flex justify-between items-center pt-4 px-6">
+          <UnitToggle unit={unit} onChange={handleUnitChange} />
           <ThemeToggle />
         </div>
         <div className="px-6 py-4 md:px-10 md:py-6">
@@ -82,13 +96,13 @@ export default function WeatherApp() {
           
           {currentWeather && !loading && (
             <div className="animate-fadeIn">
-              <WeatherDisplay weather={currentWeather} />
+              <WeatherDisplay weather={currentWeather} unit={unit} />
             </div>
           )}
           
           {forecast && !loading && (
             <div className="animate-slideUp">
-              <ForecastDisplay forecast={forecast} />
+              <ForecastDisplay forecast={forecast} unit={unit} />
             </div>
           )}
         </div>

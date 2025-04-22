@@ -4,6 +4,7 @@ import { ForecastData } from '@/types/weather';
 
 interface ForecastDisplayProps {
   forecast: ForecastData;
+  unit: 'metric' | 'imperial';
 }
 
 // Weather condition backgrounds (with dark mode variants) 
@@ -25,7 +26,7 @@ const weatherBackgrounds: Record<string, string> = {
   Tornado: 'from-red-600 to-gray-600 dark:from-red-800 dark:to-gray-700',
 };
 
-export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
+export default function ForecastDisplay({ forecast, unit }: ForecastDisplayProps) {
   // Check if forecast data has the expected structure
   if (!forecast || !forecast.list || !Array.isArray(forecast.list) || forecast.list.length === 0) {
     // Return a fallback UI when data is incomplete
@@ -89,8 +90,8 @@ export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
   // first 5 days of forecast
   const dailyForecasts = Object.keys(groupedForecast).slice(0, 5);
 
-  // Debug forecast data structure
-  console.log('Forecast data structure:', forecast);
+  // Get the temperature unit symbol
+  const unitSymbol = unit === 'metric' ? '°C' : '°F';
 
   // If no daily forecasts were extracted, show a message
   if (dailyForecasts.length === 0) {
@@ -148,11 +149,11 @@ export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
                       <div className="flex justify-around mt-3">
                         <div className="text-center">
                           <span className="text-xs opacity-80">High</span>
-                          <p className="text-xl font-bold">{Math.round(main.temp_max || 0)}°</p>
+                          <p className="text-xl font-bold">{Math.round(main.temp_max || 0)}{unitSymbol}</p>
                         </div>
                         <div className="text-center">
                           <span className="text-xs opacity-80">Low</span>
-                          <p className="text-xl">{Math.round(main.temp_min || 0)}°</p>
+                          <p className="text-xl">{Math.round(main.temp_min || 0)}{unitSymbol}</p>
                         </div>
                       </div>
                     </div>
@@ -222,7 +223,7 @@ export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
                         <span>{weatherItem.main || 'Unknown'}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-300">
-                        <span className="font-semibold">{Math.round(mainData.temp || 0)}°C</span>
+                        <span className="font-semibold">{Math.round(mainData.temp || 0)}{unitSymbol}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-300">
                         <div className="flex items-center">
@@ -230,7 +231,7 @@ export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                           </svg>
-                          {Math.round((windData.speed || 0) * 3.6)} km/h
+                          {Math.round((windData.speed || 0) * (unit === 'metric' ? 3.6 : 1))} {unit === 'metric' ? 'km/h' : 'mph'}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-300">

@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 
 interface WeatherDisplayProps {
   weather: WeatherData;
+  unit: 'metric' | 'imperial';
 }
 
 // Weather condition backgrounds
@@ -175,16 +176,27 @@ const weatherAnimations: Record<string, WeatherAnimationFunction> = {
 };
 
 // Component for temperature indicator
-const TemperatureIndicator = ({ temp }: { temp: number }) => {
+const TemperatureIndicator = ({ temp, unit }: { temp: number, unit: 'metric' | 'imperial' }) => {
   // Determine color based on temperature
   let color = 'bg-blue-500';
-  if (temp > 30) color = 'bg-red-500';
-  else if (temp > 20) color = 'bg-orange-500';
-  else if (temp > 10) color = 'bg-yellow-500';
-  else if (temp <= 0) color = 'bg-blue-700';
   
-  // Height percentage based on temperature (0-40°C range)
-  const heightPercent = Math.min(Math.max((temp + 10) * 2, 0), 100);
+  if (unit === 'metric') {
+    if (temp > 30) color = 'bg-red-500';
+    else if (temp > 20) color = 'bg-orange-500';
+    else if (temp > 10) color = 'bg-yellow-500';
+    else if (temp <= 0) color = 'bg-blue-700';
+  } else {
+    // Fahrenheit temperature ranges
+    if (temp > 86) color = 'bg-red-500';
+    else if (temp > 68) color = 'bg-orange-500';
+    else if (temp > 50) color = 'bg-yellow-500';
+    else if (temp <= 32) color = 'bg-blue-700';
+  }
+  
+  // Height percentage based on temperature (different scales for C/F)
+  const heightPercent = unit === 'metric'
+    ? Math.min(Math.max((temp + 10) * 2, 0), 100) // Scale for Celsius (-10°C to 40°C)
+    : Math.min(Math.max((temp - 14) * 100 / 86, 0), 100); // Scale for Fahrenheit (14°F to 100°F)
   
   return (
     <div className="relative w-3 h-16 bg-white/30 dark:bg-black/30 rounded-full overflow-hidden">
@@ -278,7 +290,7 @@ const DayNightCycleIndicator = ({
   );
 };
 
-export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
+export default function WeatherDisplay({ weather, unit }: WeatherDisplayProps) {
   const [currentTime, setCurrentTime] = useState<number>(Math.floor(Date.now() / 1000));
 
   // Update current time every minute
@@ -340,6 +352,9 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
     return null;
   }, [condition.main, isDay]);
 
+  // Get the correct unit symbol
+  const unitSymbol = unit === 'metric' ? '°C' : '°F';
+
   return (
     <div className="mb-6 sm:mb-10 overflow-hidden rounded-lg sm:rounded-xl">
       <div className={`relative bg-gradient-to-r ${bgGradient} shadow-lg text-white dark:text-gray-100`}>
@@ -359,10 +374,10 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
                 {condition.description && condition.description.charAt(0).toUpperCase() + condition.description.slice(1)}
               </p>
               <div className="flex items-center gap-3 sm:gap-4 my-3 sm:my-4">
-                <div className="text-5xl sm:text-7xl font-bold">{Math.round(temp)}°</div>
-                <TemperatureIndicator temp={temp} />
+                <div className="text-5xl sm:text-7xl font-bold">{Math.round(temp)}{unitSymbol}</div>
+                <TemperatureIndicator temp={temp} unit={unit} />
               </div>
-              <p className="text-base sm:text-lg opacity-90">Feels like: {Math.round(feels_like)}°</p>
+              <p className="text-base sm:text-lg opacity-90">Feels like: {Math.round(feels_like)}{unitSymbol}</p>
             </div>
             
             <div className="mt-4 sm:mt-6 flex gap-2 sm:gap-3">
@@ -370,13 +385,13 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
                 </svg>
-                <span>{Math.round(temp_max)}°</span>
+                <span>{Math.round(temp_max)}{unitSymbol}</span>
               </div>
               <div className="flex items-center bg-white/20 dark:bg-black/20 rounded-lg px-2 sm:px-3 py-1 text-sm sm:text-base">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
-                <span>{Math.round(temp_min)}°</span>
+                <span>{Math.round(temp_min)}{unitSymbol}</span>
               </div>
             </div>
           </div>
@@ -415,7 +430,7 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
           
           <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
             <span className="text-2xs sm:text-xs uppercase tracking-wider opacity-80">Wind</span>
-            <WindDirectionIndicator speed={(wind.speed || 0) * 3.6} degrees={wind.deg || 0} />
+            <WindDirectionIndicator speed={unit === 'metric' ? (wind.speed || 0) * 3.6 : (wind.speed || 0)} degrees={wind.deg || 0} />
           </div>
           
           <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
