@@ -202,20 +202,20 @@ const TemperatureIndicator = ({ temp }: { temp: number }) => {
 // Component for wind direction indicator
 const WindDirectionIndicator = ({ speed, degrees }: { speed: number, degrees: number }) => {
   return (
-    <div className="relative w-12 h-12 flex items-center justify-center">
-      <div className="absolute w-10 h-10 rounded-full border border-white/30 dark:border-white/20"></div>
+    <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
+      <div className="absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white/30 dark:border-white/20"></div>
       <div 
-        className="absolute w-0.5 h-5 bg-white/80 dark:bg-white/70 rounded-full origin-bottom transform transition-transform duration-1000"
+        className="absolute w-0.5 h-4 sm:h-5 bg-white/80 dark:bg-white/70 rounded-full origin-bottom transform transition-transform duration-1000"
         style={{ transform: `rotate(${degrees}deg) translateY(-4px)` }}
       ></div>
       <div 
         className="absolute w-1.5 h-1.5 bg-white/80 dark:bg-white/70 rounded-full transform transition-transform duration-1000"
         style={{ 
-          transform: `rotate(${degrees}deg) translateY(-7px)`,
+          transform: `rotate(${degrees}deg) translateY(-6px) sm:translateY(-7px)`,
           borderRadius: '50% 50% 0 0'
         }}
       ></div>
-      <div className="text-[8px] text-white/70 mt-8">{Math.round(speed)} km/h</div>
+      <div className="text-[8px] text-white/70 mt-6 sm:mt-8">{Math.round(speed)} km/h</div>
     </div>
   );
 };
@@ -341,39 +341,39 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
   }, [condition.main, isDay]);
 
   return (
-    <div className="mb-10 overflow-hidden rounded-xl">
+    <div className="mb-6 sm:mb-10 overflow-hidden rounded-lg sm:rounded-xl">
       <div className={`relative bg-gradient-to-r ${bgGradient} shadow-lg text-white dark:text-gray-100`}>
         {/* Dynamic weather animation */}
         {weatherAnimation}
         
-        <div className="relative grid grid-cols-1 md:grid-cols-2 p-6 md:p-8">
+        <div className="relative grid grid-cols-1 md:grid-cols-2 p-4 sm:p-6 md:p-8">
           <div className="flex flex-col justify-between">
             <div>
-              <div className="flex items-center">
-                <h2 className="text-3xl font-bold">{name}</h2>
+              <div className="flex items-center flex-wrap gap-2">
+                <h2 className="text-2xl sm:text-3xl font-bold">{name}</h2>
                 {sys.country && (
-                  <span className="ml-2 text-xl bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md">{sys.country}</span>
+                  <span className="text-sm sm:text-xl bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md">{sys.country}</span>
                 )}
               </div>
-              <p className="text-lg mt-1 opacity-90">
+              <p className="text-base sm:text-lg mt-1 opacity-90">
                 {condition.description && condition.description.charAt(0).toUpperCase() + condition.description.slice(1)}
               </p>
-              <div className="flex items-center gap-4 my-4">
-                <div className="text-7xl font-bold">{Math.round(temp)}°</div>
+              <div className="flex items-center gap-3 sm:gap-4 my-3 sm:my-4">
+                <div className="text-5xl sm:text-7xl font-bold">{Math.round(temp)}°</div>
                 <TemperatureIndicator temp={temp} />
               </div>
-              <p className="text-lg opacity-90">Feels like: {Math.round(feels_like)}°</p>
+              <p className="text-base sm:text-lg opacity-90">Feels like: {Math.round(feels_like)}°</p>
             </div>
             
-            <div className="mt-6 flex gap-3">
-              <div className="flex items-center bg-white/20 dark:bg-black/20 rounded-lg px-3 py-1">
-                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div className="mt-4 sm:mt-6 flex gap-2 sm:gap-3">
+              <div className="flex items-center bg-white/20 dark:bg-black/20 rounded-lg px-2 sm:px-3 py-1 text-sm sm:text-base">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
                 </svg>
                 <span>{Math.round(temp_max)}°</span>
               </div>
-              <div className="flex items-center bg-white/20 dark:bg-black/20 rounded-lg px-3 py-1">
-                <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <div className="flex items-center bg-white/20 dark:bg-black/20 rounded-lg px-2 sm:px-3 py-1 text-sm sm:text-base">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
                 <span>{Math.round(temp_min)}°</span>
@@ -381,17 +381,17 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
             </div>
           </div>
           
-          <div className="flex flex-col items-center justify-center mt-4 md:mt-0">
+          <div className="flex flex-col items-center justify-center mt-2 md:mt-0">
             <img 
               src={iconUrl} 
               alt={condition.description || 'Weather icon'} 
-              className="w-32 h-32 md:w-48 md:h-48 object-contain drop-shadow-lg transition-all duration-500 hover:scale-105"
+              className="w-28 h-28 sm:w-32 sm:h-32 md:w-48 md:h-48 object-contain drop-shadow-lg transition-all duration-500 hover:scale-105"
             />
           </div>
         </div>
         
         {/* Day/night cycle indicator */}
-        <div className="px-6 md:px-8 pb-4">
+        <div className="px-4 sm:px-6 md:px-8 pb-3 sm:pb-4">
           <DayNightCycleIndicator 
             current={currentTime} 
             sunrise={sys.sunrise} 
@@ -399,34 +399,34 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
           />
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 p-4 md:p-6 bg-black/10 dark:bg-white/5 backdrop-blur-sm">
-          <div className="flex flex-col items-center p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
-            <span className="text-xs uppercase tracking-wider opacity-80">Humidity</span>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 md:gap-4 p-3 sm:p-4 md:p-6 bg-black/10 dark:bg-white/5 backdrop-blur-sm">
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
+            <span className="text-2xs sm:text-xs uppercase tracking-wider opacity-80">Humidity</span>
             <div className="flex items-center mt-1 w-full">
-              <svg className="w-5 h-5 mr-1 opacity-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 opacity-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14a7 7 0 01-7 7m-7-7a7 7 0 017-7m7 7H5"></path>
               </svg>
-              <span className="text-xl font-semibold mr-2">{humidity}%</span>
+              <span className="text-lg sm:text-xl font-semibold mr-2">{humidity}%</span>
             </div>
-            <div className="w-full mt-2">
+            <div className="w-full mt-1 sm:mt-2">
               <HumidityIndicator humidity={humidity} />
             </div>
           </div>
           
-          <div className="flex flex-col items-center p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
-            <span className="text-xs uppercase tracking-wider opacity-80">Wind</span>
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
+            <span className="text-2xs sm:text-xs uppercase tracking-wider opacity-80">Wind</span>
             <WindDirectionIndicator speed={(wind.speed || 0) * 3.6} degrees={wind.deg || 0} />
           </div>
           
-          <div className="flex flex-col items-center p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
-            <span className="text-xs uppercase tracking-wider opacity-80">Pressure</span>
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
+            <span className="text-2xs sm:text-xs uppercase tracking-wider opacity-80">Pressure</span>
             <div className="flex items-center mt-1">
-              <svg className="w-5 h-5 mr-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <span className="text-xl font-semibold">{pressure} hPa</span>
+              <span className="text-base sm:text-xl font-semibold">{pressure} hPa</span>
             </div>
-            <div className="mt-2 w-full bg-white/20 dark:bg-white/10 h-2 rounded-full overflow-hidden">
+            <div className="mt-1 sm:mt-2 w-full bg-white/20 dark:bg-white/10 h-1.5 sm:h-2 rounded-full overflow-hidden">
               <div 
                 className="h-full bg-green-500 dark:bg-green-400 transition-all duration-1000"
                 style={{ width: `${(pressure - 950) / 150 * 100}%` }}
@@ -434,16 +434,16 @@ export default function WeatherDisplay({ weather }: WeatherDisplayProps) {
             </div>
           </div>
           
-          <div className="flex flex-col items-center p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
-            <span className="text-xs uppercase tracking-wider opacity-80">Sun</span>
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-white/10 dark:bg-black/20 rounded-lg backdrop-blur-sm transition-transform hover:scale-105">
+            <span className="text-2xs sm:text-xs uppercase tracking-wider opacity-80">Sun</span>
             <div className="flex flex-col items-center mt-1">
               <div className="flex items-center mb-1">
                 <span className="mr-1">🌅</span>
-                <span className="text-sm">{formatTime(sys.sunrise)}</span>
+                <span className="text-xs sm:text-sm">{formatTime(sys.sunrise)}</span>
               </div>
               <div className="flex items-center">
                 <span className="mr-1">🌇</span>
-                <span className="text-sm">{formatTime(sys.sunset)}</span>
+                <span className="text-xs sm:text-sm">{formatTime(sys.sunset)}</span>
               </div>
             </div>
           </div>
