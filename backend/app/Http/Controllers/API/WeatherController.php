@@ -18,12 +18,6 @@ class WeatherController extends Controller
         $this->apiKey = env('OPENWEATHER_API_KEY');
     }
 
-    /**
-     * Get current weather for a location
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function getCurrentWeather(Request $request)
     {
         try {
@@ -62,12 +56,7 @@ class WeatherController extends Controller
         }
     }
 
-    /**
-     * Get weather forecast for a location
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+   
     public function getForecast(Request $request)
     {
         $request->validate([

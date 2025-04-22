@@ -6,7 +6,7 @@ interface ForecastDisplayProps {
   forecast: ForecastData;
 }
 
-// Weather condition backgrounds (simplified subset for forecast)
+// Weather condition backgrounds 
 const weatherBackgrounds: Record<string, string> = {
   Clear: 'from-blue-400 to-cyan-300',
   Clouds: 'from-blue-300 to-gray-300',
@@ -78,7 +78,7 @@ export default function ForecastDisplay({ forecast }: ForecastDisplayProps) {
     );
   }
 
-  // Get daily forecasts (first 5 days or all if fewer)
+  // first 5 days of forecast
   const dailyForecasts = Object.keys(groupedForecast).slice(0, 5);
 
   // Debug forecast data structure

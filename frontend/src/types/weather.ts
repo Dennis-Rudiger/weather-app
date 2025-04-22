@@ -1,4 +1,3 @@
-// Weather data interfaces for TypeScript type checking
 
 export interface WeatherData {
   name: string;
